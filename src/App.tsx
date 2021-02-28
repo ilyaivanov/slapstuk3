@@ -1,5 +1,5 @@
 import React from "react";
-import Board from "./Board/Board";
+import Board from "./board/Board";
 import defaultBoard from "./defaultBoard";
 import Header from "./Header";
 import { cn, css } from "./infra";

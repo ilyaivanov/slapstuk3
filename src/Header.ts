@@ -1,19 +1,20 @@
 import { cls, css, sUtils, colors, spacings } from "./infra";
+import { div, input } from "./infra/react";
 
 interface HeaderProps {
   isDark: boolean;
   onDarkChanged: (d: boolean) => void;
 }
 
-const Header = ({ isDark, onDarkChanged }: HeaderProps) => (
-  <div className={cls.header}>
-    <input
-      type="checkbox"
-      checked={isDark}
-      onChange={(e) => onDarkChanged(e.currentTarget.checked)}
-    />
-  </div>
-);
+const Header = ({ isDark, onDarkChanged }: HeaderProps) =>
+  div({
+    cls: cls.header,
+    children: input({
+      type: "checkbox",
+      checked: isDark,
+      onChange: (e) => onDarkChanged(e.currentTarget.checked),
+    }),
+  });
 
 css.class(cls.header, {
   height: spacings.headerHeight,
