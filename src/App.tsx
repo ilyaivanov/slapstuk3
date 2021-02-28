@@ -1,26 +1,25 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import Board from "./Board/Board";
+import defaultBoard from "./defaultBoard";
+import Header from "./Header";
+import { cn, css } from "./infra";
 
 function App() {
+  const [isDark, setIsDark] = React.useState(false);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className={cn({ page: true, "board-dark": isDark })}>
+      <Header
+        isDark={isDark}
+        onDarkChanged={(isNewDark) => setIsDark(isNewDark)}
+      />
+      <Board board={defaultBoard} />
     </div>
   );
 }
 
 export default App;
+
+css.class("page", {
+  width: "100vw",
+  height: "100vh",
+});
