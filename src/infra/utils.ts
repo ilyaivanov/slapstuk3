@@ -64,18 +64,6 @@ export function generateRandomColorHsl() {
   return "hsl(" + hue + ", " + saturation + ", " + lightness + ")";
 }
 
-export type ClassProp = ClassName | ClassMap;
-
-export const cn = (classProp: ClassProp): string => {
-  if (typeof classProp == "string") return classProp;
-  else
-    return keys(classProp)
-      .filter((key) => !!classProp[key])
-      .join(" ");
-};
-
-const keys = <T>(val: T): (keyof T)[] => Object.keys(val) as (keyof T)[];
-
 export const getScrollDistanceFromBottom = (element: HTMLElement) =>
   element.scrollHeight - element.scrollTop - element.offsetHeight;
 

@@ -1,27 +1,27 @@
 import React from "react";
 import { cls, css, sUtils, colors, spacings } from "../infra";
-import BoardItem from "./BoardItem";
+import { div, span } from "../infra/react";
+import viewBoardItem from "./BoardItem";
 
 type Props = {
   board: Board;
 };
 
 class BoardView extends React.Component<Props> {
+  renderColumn = (column: Column) =>
+    div(
+      {
+        key: column.id,
+        cls: cls.column,
+      },
+      span({ cls: cls.columnTitle }, column.name),
+      div({ cls: cls.itemsContainer }, column.items.map(viewBoardItem))
+    );
+
   render() {
-    const { board } = this.props;
-    return (
-      <div className={cls.board}>
-        {board.columns.map((c) => (
-          <div key={c.id} className={cls.column}>
-            <span className={cls.columnTitle}>{c.name}</span>
-            <div className={cls.itemsContainer}>
-              {c.items.map((item) => (
-                <BoardItem key={item.id} item={item} />
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
+    return div(
+      { cls: cls.board },
+      this.props.board.columns.map(this.renderColumn)
     );
   }
 }

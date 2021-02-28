@@ -1,44 +1,71 @@
 import React from "react";
-import { ClassProp, cn } from "./utils";
+import { ClassMap, ClassName } from "./projectSpecific/keys";
+
+interface CommonProps {
+  key?: string;
+  tid?: string;
+  cls?: ClassName;
+  clsMap?: ClassMap;
+}
 
 //interesting idea to test react without jsx
 //like elm or flutter
-type DivProps = {
-  cls?: ClassProp;
-  children?: React.ReactNode | React.ReactNode[];
+interface DivProps extends CommonProps {
+  ref?: React.RefObject<HTMLDivElement>;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
-};
-
-export function div({ cls, ...props }: DivProps) {
-  const passProps = { className: cls ? cn(cls) : undefined, ...props };
-  if (Array.isArray(props.children))
-    return React.createElement("div", passProps, ...props.children);
-  return React.createElement("div", passProps, props.children);
+  onWheel?: React.WheelEventHandler<HTMLDivElement>;
 }
 
-type InputProps = {
+type Children = React.ReactNode | React.ReactNode[];
+
+export function div(props: DivProps, ...children: Children[]) {
+  return React.createElement("div", convertProps(props), ...children);
+}
+
+export function fragment(...children: Children[]) {
+  return React.createElement(React.Fragment, null, ...children);
+}
+
+interface InputProps {
   type: "checkbox" | "text";
   checked: boolean;
   onChange: React.ChangeEventHandler<HTMLInputElement>;
-};
+}
 
 export function input({ ...props }: InputProps) {
   return React.createElement("input", { ...props });
 }
 
-type SpanProps = {
-  children?: string;
-};
+interface SpanProps extends CommonProps {}
 
-export function span({ ...props }: SpanProps) {
-  return React.createElement("span", { ...props });
+export function span(props: SpanProps, text: string) {
+  return React.createElement("span", convertProps(props), text);
 }
 
-type ImgProps = {
-  cls?: ClassProp;
+interface ImgProps extends CommonProps {
   src: string;
+}
+
+export function img(props: ImgProps) {
+  return React.createElement("img", { alt: "", ...convertProps(props) });
+}
+
+const convertProps = ({ cls, clsMap, tid, ...props }: CommonProps): {} => ({
+  className: cn(cls, clsMap),
+  "data-testid": tid,
+  ...props,
+});
+
+const cn = (
+  cls: ClassName | undefined,
+  clsMap: ClassMap | undefined
+): string => {
+  let className = cls || "";
+  if (clsMap)
+    className += keys(clsMap)
+      .filter((key) => !!clsMap[key])
+      .join(" ");
+  return className;
 };
 
-export function img({ ...props }: ImgProps) {
-  return React.createElement("img", { alt: "", ...props });
-}
+const keys = <T>(val: T): (keyof T)[] => Object.keys(val) as (keyof T)[];

@@ -3,10 +3,7 @@ import { div, img, span } from "../infra/react";
 
 type SubitemProps = { title: string; image: string };
 const Subitem = ({ title, image }: SubitemProps) =>
-  div({
-    cls: cls.subitem,
-    children: [img({ src: image }), span({ children: title })],
-  });
+  div({ cls: cls.subitem }, img({ src: image }), span({}, title));
 
 css.class(cls.subitem, {
   display: "flex",

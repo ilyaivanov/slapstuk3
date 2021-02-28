@@ -1,11 +1,13 @@
 import React from "react";
 import { Styles } from "./style";
 import * as anim from "./animations";
+import { div } from "./react";
+import { ClassName } from ".";
 
 type CollapsibleCotainerProps = {
   isOpen: boolean;
   style?: Styles;
-  className?: string;
+  className?: ClassName;
   children: () => React.ReactNode;
   onWheel?: (e: React.WheelEvent<HTMLDivElement>) => void;
   heightProperty?: string;
@@ -134,15 +136,12 @@ export class CollapsibleContainer extends React.PureComponent<
   };
 
   render() {
-    return (
-      <div
-        className={this.props.className}
-        ref={this.childRef}
-        style={this.props.style}
-        onWheel={this.props.onWheel}
-      >
-        {this.state.isVisible && this.props.children()}
-      </div>
+    return div(
+      {
+        cls: this.props.className,
+        ref: this.childRef,
+      },
+      this.state.isVisible && this.props.children()
     );
   }
 }

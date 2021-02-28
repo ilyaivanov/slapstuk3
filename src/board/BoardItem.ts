@@ -7,47 +7,59 @@ import {
   colors,
   spacings,
 } from "../infra";
+import { div, fragment, img, span } from "../infra/react";
 import Subitem from "./Subitem";
 
-const BoardItem = ({ item }: { item: Item }) => {
+type Props = { item: Item; key: string };
+
+const BoardItem = ({ item }: Props) => {
   const [isOpen, setIsOpen] = React.useState(false);
-  return (
-    <div key={item.id} className={cls.itemCard}>
-      <div className={cls.itemCardHeader} onClick={() => setIsOpen(!isOpen)}>
-        <img src={getImageSrc(item)} alt="" />
-        <span>{item.name}</span>
-        {item.type == "playlist" && (
-          <span className={cls.itemType}>playlist</span>
-        )}
-      </div>
-      {item.type === "playlist" && (
-        <CollapsibleContainer className={cls.subitemsContainer} isOpen={isOpen}>
-          {() => (
-            <>
-              <Subitem
-                image="https://i.ytimg.com/vi/0Bvm9yG4cvs/mqdefault.jpg"
-                title="Ludovico Einaudi - Una mattina FULL ALBUM"
-              />
-              <Subitem
-                image="https://i.ytimg.com/vi/0Bvm9yG4cvs/mqdefault.jpg"
-                title="Ludovico Einaudi - Una mattina FULL ALBUM"
-              />
-              <Subitem
-                image="https://i.ytimg.com/vi/0Bvm9yG4cvs/mqdefault.jpg"
-                title="Ludovico Einaudi - Una mattina FULL ALBUM"
-              />
-              <Subitem
-                image="https://i.ytimg.com/vi/0Bvm9yG4cvs/mqdefault.jpg"
-                title="Ludovico Einaudi - Una mattina FULL ALBUM"
-              />
-            </>
-          )}
-        </CollapsibleContainer>
-      )}
-    </div>
+  return div(
+    { cls: cls.itemCard },
+    div(
+      {
+        cls: cls.itemCardHeader,
+        onClick: () => setIsOpen(!isOpen),
+      },
+      img({ src: getImageSrc(item) }),
+      span({}, item.name),
+      item.type == "playlist" && span({ cls: cls.itemType }, "playlist")
+    ),
+    item.type === "playlist" &&
+      viewCollapsibleContainer(cls.subitemsContainer, isOpen, () =>
+        fragment(
+          viewLudovicoSubitem,
+          viewLudovicoSubitem,
+          viewLudovicoSubitem,
+          viewLudovicoSubitem,
+          viewLudovicoSubitem,
+          viewLudovicoSubitem,
+          viewLudovicoSubitem
+        )
+      )
   );
 };
+export default (item: Item) =>
+  React.createElement(BoardItem, { item, key: item.id });
 
+const viewCollapsibleContainer = (
+  className: string,
+  isOpen: boolean,
+  renderProps: any
+) =>
+  React.createElement(
+    CollapsibleContainer,
+    { className, isOpen } as any,
+    renderProps
+  );
+
+const viewSubitem = (image: string, title: string) =>
+  React.createElement(Subitem, { image, title });
+
+const viewLudovicoSubitem = viewSubitem(
+  "https://i.ytimg.com/vi/0Bvm9yG4cvs/mqdefault.jpg",
+  "Ludovico Einaudi - Una mattina FULL ALBUM"
+);
 css.class(cls.itemCard, {
   position: "relative",
   marginTop: spacings.columnGap,
@@ -121,9 +133,7 @@ css.class(cls.subitemsContainer, {
   overflow: "hidden",
 });
 
-export default BoardItem;
-
-export const getImageSrc = (item: Item): string | undefined => {
+export const getImageSrc = (item: Item): string => {
   if (item.type === "playlist") return item.image;
   else return `https://i.ytimg.com/vi/${item.videoId}/mqdefault.jpg`;
 };

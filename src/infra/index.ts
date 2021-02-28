@@ -16,7 +16,6 @@ export type { ClassName } from "./projectSpecific/keys";
 export * as icons from "./icons";
 export * as anim from "./animations";
 export * as utils from "./utils";
-export { cn } from "./utils";
 export { colors, spacings, typography } from "./projectSpecific/constants";
 // export * as itemEvents from "./events";
 // import * as dom from "./dom";
