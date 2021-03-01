@@ -1,12 +1,10 @@
+import React from "react";
 import { cls, css, sUtils, colors } from "../infra";
+import { div, img, span } from "../infra/react";
 
 type SubitemProps = { title: string; image: string };
-const Subitem = ({ title, image }: SubitemProps) => (
-  <div className={cls.subitem}>
-    <img src={image} alt="" />
-    <span>{title}</span>
-  </div>
-);
+const Subitem = ({ title, image }: SubitemProps) =>
+  div({ cls: cls.subitem }, img({ src: image }), span({}, title));
 
 css.class(cls.subitem, {
   display: "flex",
@@ -43,4 +41,4 @@ css.parentChildTag(cls.subitem, "span", {
   fontSize: 12,
 });
 
-export default Subitem;
+export default (props: SubitemProps) => React.createElement(Subitem, props);

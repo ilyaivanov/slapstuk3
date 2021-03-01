@@ -1,5 +1,3 @@
-import { ClassName, utils } from ".";
-
 export type EventsDefinition = {
   [key in string]: (e: MouseEvent) => void;
 };

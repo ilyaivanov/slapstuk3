@@ -1,52 +1,53 @@
 import React from "react";
 import {
   cls,
-  CollapsibleContainer,
+  viewCollapsibleContainer,
   css,
   sUtils,
   colors,
   spacings,
 } from "../infra";
-import Subitem from "./Subitem";
+import { div, fragment, img, span } from "../infra/react";
+import viewSubitem from "./Subitem";
 
-const BoardItem = ({ item }: { item: Item }) => {
+type Props = { item: Item; key: string };
+
+const BoardItem = ({ item }: Props) => {
   const [isOpen, setIsOpen] = React.useState(false);
-  return (
-    <div key={item.id} className={cls.itemCard}>
-      <div className={cls.itemCardHeader} onClick={() => setIsOpen(!isOpen)}>
-        <img src={getImageSrc(item)} alt="" />
-        <span>{item.name}</span>
-        {item.type == "playlist" && (
-          <span className={cls.itemType}>playlist</span>
-        )}
-      </div>
-      {item.type === "playlist" && (
-        <CollapsibleContainer className={cls.subitemsContainer} isOpen={isOpen}>
-          {() => (
-            <>
-              <Subitem
-                image="https://i.ytimg.com/vi/0Bvm9yG4cvs/mqdefault.jpg"
-                title="Ludovico Einaudi - Una mattina FULL ALBUM"
-              />
-              <Subitem
-                image="https://i.ytimg.com/vi/0Bvm9yG4cvs/mqdefault.jpg"
-                title="Ludovico Einaudi - Una mattina FULL ALBUM"
-              />
-              <Subitem
-                image="https://i.ytimg.com/vi/0Bvm9yG4cvs/mqdefault.jpg"
-                title="Ludovico Einaudi - Una mattina FULL ALBUM"
-              />
-              <Subitem
-                image="https://i.ytimg.com/vi/0Bvm9yG4cvs/mqdefault.jpg"
-                title="Ludovico Einaudi - Una mattina FULL ALBUM"
-              />
-            </>
-          )}
-        </CollapsibleContainer>
-      )}
-    </div>
+  return div(
+    { cls: cls.itemCard },
+    div(
+      {
+        cls: cls.itemCardHeader,
+        onClick: () => setIsOpen(!isOpen),
+      },
+      img({ src: getImageSrc(item) }),
+      span({ cls: cls.cardText }, item.name),
+      item.type == "playlist" && span({ cls: cls.itemType }, "playlist")
+    ),
+    item.type === "playlist" &&
+      viewCollapsibleContainer(
+        { className: cls.subitemsContainer, isOpen },
+        () =>
+          fragment(
+            viewLudovicoSubitem,
+            viewLudovicoSubitem,
+            viewLudovicoSubitem,
+            viewLudovicoSubitem,
+            viewLudovicoSubitem,
+            viewLudovicoSubitem,
+            viewLudovicoSubitem
+          )
+      )
   );
 };
+export default (item: Item) =>
+  React.createElement(BoardItem, { item, key: item.id });
+
+const viewLudovicoSubitem = viewSubitem({
+  image: "https://i.ytimg.com/vi/0Bvm9yG4cvs/mqdefault.jpg",
+  title: "Ludovico Einaudi - Una mattina FULL ALBUM",
+});
 
 css.class(cls.itemCard, {
   position: "relative",
@@ -80,7 +81,7 @@ css.class(cls.itemCardHeader, {
   display: "flex",
   alignItems: "center",
   cursor: "pointer",
-  height: 48,
+  height: spacings.cardHeight,
 });
 
 css.hover(cls.itemCardHeader, {
@@ -92,13 +93,13 @@ css.selector(`.${cls.boardDark} .${cls.itemCardHeader}:hover`, {
 });
 
 css.parentChildTag(cls.itemCardHeader, "img", {
-  width: 68,
-  height: 48,
+  width: Math.round(spacings.cardHeight * (320 / 180)),
+  height: spacings.cardHeight,
   objectFit: "cover",
   display: "block",
 });
 
-css.parentChildTag(cls.itemCardHeader, "span", {
+css.parentChild(cls.itemCardHeader, cls.cardText, {
   lineHeight: 16,
   fontSize: 14,
   ...sUtils.paddingHorizontal(6),
@@ -108,9 +109,8 @@ css.class(cls.itemType, {
   position: "absolute",
   bottom: 0,
   left: 0,
-  width: 68,
-  padding: 1,
-  fontSize: 1,
+  width: Math.round(spacings.cardHeight * (320 / 180)),
+  fontSize: 11,
   color: "white",
   fontWeight: "bold",
   backgroundColor: colors.itemTypeBackground,
@@ -121,9 +121,7 @@ css.class(cls.subitemsContainer, {
   overflow: "hidden",
 });
 
-export default BoardItem;
-
-export const getImageSrc = (item: Item): string | undefined => {
+export const getImageSrc = (item: Item): string => {
   if (item.type === "playlist") return item.image;
   else return `https://i.ytimg.com/vi/${item.videoId}/mqdefault.jpg`;
 };
