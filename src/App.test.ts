@@ -5,13 +5,7 @@ import { div, span, fragment } from "./infra/react";
 import App from "./App";
 
 jest.mock("./infra/CollapsibleContainer", () => ({
-  CollapsibleContainer: ({
-    isOpen,
-    children,
-  }: {
-    isOpen: boolean;
-    children: () => any;
-  }) => {
+  collapsibleContainer: ({ isOpen }: any, children: any) => {
     if (isOpen) return children();
     else return null;
   },
@@ -43,6 +37,7 @@ it("rendering div with a className should render that div with a class", () => {
 
 it("render app", () => {
   render(React.createElement(App));
+
   expect(
     screen.queryByText("Ludovico Einaudi - Una mattina FULL ALBUM")
   ).not.toBeInTheDocument();

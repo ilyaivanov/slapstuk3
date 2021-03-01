@@ -1,14 +1,14 @@
 import React from "react";
 import {
   cls,
-  CollapsibleContainer,
+  viewCollapsibleContainer,
   css,
   sUtils,
   colors,
   spacings,
 } from "../infra";
 import { div, fragment, img, span } from "../infra/react";
-import Subitem from "./Subitem";
+import viewSubitem from "./Subitem";
 
 type Props = { item: Item; key: string };
 
@@ -22,44 +22,33 @@ const BoardItem = ({ item }: Props) => {
         onClick: () => setIsOpen(!isOpen),
       },
       img({ src: getImageSrc(item) }),
-      span({}, item.name),
+      span({ cls: cls.cardText }, item.name),
       item.type == "playlist" && span({ cls: cls.itemType }, "playlist")
     ),
     item.type === "playlist" &&
-      viewCollapsibleContainer(cls.subitemsContainer, isOpen, () =>
-        fragment(
-          viewLudovicoSubitem,
-          viewLudovicoSubitem,
-          viewLudovicoSubitem,
-          viewLudovicoSubitem,
-          viewLudovicoSubitem,
-          viewLudovicoSubitem,
-          viewLudovicoSubitem
-        )
+      viewCollapsibleContainer(
+        { className: cls.subitemsContainer, isOpen },
+        () =>
+          fragment(
+            viewLudovicoSubitem,
+            viewLudovicoSubitem,
+            viewLudovicoSubitem,
+            viewLudovicoSubitem,
+            viewLudovicoSubitem,
+            viewLudovicoSubitem,
+            viewLudovicoSubitem
+          )
       )
   );
 };
 export default (item: Item) =>
   React.createElement(BoardItem, { item, key: item.id });
 
-const viewCollapsibleContainer = (
-  className: string,
-  isOpen: boolean,
-  renderProps: any
-) =>
-  React.createElement(
-    CollapsibleContainer,
-    { className, isOpen } as any,
-    renderProps
-  );
+const viewLudovicoSubitem = viewSubitem({
+  image: "https://i.ytimg.com/vi/0Bvm9yG4cvs/mqdefault.jpg",
+  title: "Ludovico Einaudi - Una mattina FULL ALBUM",
+});
 
-const viewSubitem = (image: string, title: string) =>
-  React.createElement(Subitem, { image, title });
-
-const viewLudovicoSubitem = viewSubitem(
-  "https://i.ytimg.com/vi/0Bvm9yG4cvs/mqdefault.jpg",
-  "Ludovico Einaudi - Una mattina FULL ALBUM"
-);
 css.class(cls.itemCard, {
   position: "relative",
   marginTop: spacings.columnGap,
@@ -92,7 +81,7 @@ css.class(cls.itemCardHeader, {
   display: "flex",
   alignItems: "center",
   cursor: "pointer",
-  height: 48,
+  height: spacings.cardHeight,
 });
 
 css.hover(cls.itemCardHeader, {
@@ -104,13 +93,13 @@ css.selector(`.${cls.boardDark} .${cls.itemCardHeader}:hover`, {
 });
 
 css.parentChildTag(cls.itemCardHeader, "img", {
-  width: 68,
-  height: 48,
+  width: Math.round(spacings.cardHeight * (320 / 180)),
+  height: spacings.cardHeight,
   objectFit: "cover",
   display: "block",
 });
 
-css.parentChildTag(cls.itemCardHeader, "span", {
+css.parentChild(cls.itemCardHeader, cls.cardText, {
   lineHeight: 16,
   fontSize: 14,
   ...sUtils.paddingHorizontal(6),
@@ -120,9 +109,8 @@ css.class(cls.itemType, {
   position: "absolute",
   bottom: 0,
   left: 0,
-  width: 68,
-  padding: 1,
-  fontSize: 1,
+  width: Math.round(spacings.cardHeight * (320 / 180)),
+  fontSize: 11,
   color: "white",
   fontWeight: "bold",
   backgroundColor: colors.itemTypeBackground,

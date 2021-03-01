@@ -17,7 +17,7 @@ type State = {
   isVisible: boolean;
 };
 
-export class CollapsibleContainer extends React.PureComponent<
+class CollapsibleContainer extends React.PureComponent<
   CollapsibleCotainerProps,
   State
 > {
@@ -145,3 +145,13 @@ export class CollapsibleContainer extends React.PureComponent<
     );
   }
 }
+
+export const collapsibleContainer = (
+  props: Omit<CollapsibleCotainerProps, "children">,
+  ...children: any
+) =>
+  React.createElement(
+    CollapsibleContainer,
+    props as CollapsibleCotainerProps,
+    ...children
+  );

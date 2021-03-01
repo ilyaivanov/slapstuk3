@@ -1,3 +1,4 @@
+import React from "react";
 import { cls, css, sUtils, colors } from "../infra";
 import { div, img, span } from "../infra/react";
 
@@ -40,4 +41,4 @@ css.parentChildTag(cls.subitem, "span", {
   fontSize: 12,
 });
 
-export default Subitem;
+export default (props: SubitemProps) => React.createElement(Subitem, props);

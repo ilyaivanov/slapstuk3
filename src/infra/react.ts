@@ -14,12 +14,23 @@ interface DivProps extends CommonProps {
   ref?: React.RefObject<HTMLDivElement>;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
   onWheel?: React.WheelEventHandler<HTMLDivElement>;
+  onScroll?: React.UIEventHandler<HTMLDivElement>;
 }
 
 type Children = React.ReactNode | React.ReactNode[];
 
 export function div(props: DivProps, ...children: Children[]) {
   return React.createElement("div", convertProps(props), ...children);
+}
+
+interface ButtonProps extends CommonProps {
+  ref?: React.RefObject<HTMLButtonElement>;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  onWheel?: React.WheelEventHandler<HTMLButtonElement>;
+}
+
+export function button(props: ButtonProps, ...children: Children[]) {
+  return React.createElement("button", convertProps(props), ...children);
 }
 
 export function fragment(...children: Children[]) {
@@ -62,9 +73,11 @@ const cn = (
 ): string => {
   let className = cls || "";
   if (clsMap)
-    className += keys(clsMap)
-      .filter((key) => !!clsMap[key])
-      .join(" ");
+    className +=
+      " " +
+      keys(clsMap)
+        .filter((key) => !!clsMap[key])
+        .join(" ");
   return className;
 };
 

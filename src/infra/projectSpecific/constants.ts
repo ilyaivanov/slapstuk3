@@ -2,7 +2,7 @@ export const typography = {};
 export const spacings = {
   columnGap: 15,
   headerHeight: 49,
-
+  cardHeight: 40,
   distanceBetweenScrollAndColumnSeparator: 1,
 };
 const whiteMenuColor = "#f8f9fa";

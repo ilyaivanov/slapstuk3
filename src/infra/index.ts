@@ -1,6 +1,6 @@
 import { folderPlus } from "./icons";
 
-export { CollapsibleContainer } from "./CollapsibleContainer";
+export { collapsibleContainer as viewCollapsibleContainer } from "./CollapsibleContainer";
 export { css, styles as sUtils } from "./style";
 export { zIndexes, tIds, cls } from "./projectSpecific/keys";
 export type { ClassName } from "./projectSpecific/keys";

@@ -5,6 +5,7 @@ import viewBoardItem from "./BoardItem";
 
 type Props = {
   board: Board;
+  onScroll: (e: React.UIEvent<HTMLDivElement>) => void;
 };
 
 class BoardView extends React.Component<Props> {
@@ -20,13 +21,19 @@ class BoardView extends React.Component<Props> {
 
   render() {
     return div(
-      { cls: cls.board },
-      this.props.board.columns.map(this.renderColumn)
+      {
+        cls: cls.board,
+        onScroll: this.props.onScroll,
+      },
+      this.props.board.columns.map(this.renderColumn),
+      span({ cls: cls.addColumnButton }, "+"),
+      div({ cls: cls.boardRightEndSpacing })
     );
   }
 }
 
 css.class(cls.board, {
+  gridArea: "board",
   display: "flex",
   flexDirection: "row",
   justifyContent: "flex-start",
@@ -74,6 +81,25 @@ css.class(cls.itemsContainer, {
     spacings.columnGap - spacings.distanceBetweenScrollAndColumnSeparator,
 });
 
+css.class(cls.addColumnButton, {
+  marginLeft: spacings.columnGap,
+  width: 250,
+  minWidth: 250,
+  height: 40,
+  backgroundColor: colors.light.itemBackground,
+  cursor: "pointer",
+  fontSize: 26,
+  lineHeight: 26,
+  fontWeight: 700,
+  ...sUtils.flexCenter,
+});
+
+css.class(cls.boardRightEndSpacing, {
+  width: spacings.columnGap,
+  minWidth: spacings.columnGap,
+  height: 30, //any non-zero value
+});
+
 css.text(
   sUtils.scrollbar(cls.itemsContainer, {
     width: 6,
@@ -81,4 +107,4 @@ css.text(
   })
 );
 
-export default BoardView;
+export default BoardView; //  (props: Props) => React.createElement(BoardView, props);
